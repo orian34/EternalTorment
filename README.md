@@ -1,7 +1,5 @@
 Eternal Torment Mod for Silksong
 
-Copyright (C) 2025 orian34
-
 Version 1.2
 
 To use, place the dll into the plugins folder. Requires BepInEx 5 with ConfigManager.
