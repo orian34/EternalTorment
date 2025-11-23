@@ -8,18 +8,20 @@ using GlobalSettings;
 
 namespace EternalTorment;
 
-[BepInAutoPlugin("io.github.eternaltorment","Eternal Torment","1.2.0")]
+[BepInAutoPlugin("io.github.eternaltorment","Eternal Torment","1.3.0")]
 public partial class EternalTormentPlugin : BaseUnityPlugin
 {
     internal static new ManualLogSource Logger;
     public static ConfigEntry<bool> rosaryPreservation;
     public static ConfigEntry<bool> shardsRecycling;
+    public static ConfigEntry<bool> modToggleDeath;
     public static int Money = 0;
     private void Awake()
     {
         Logger = base.Logger;
         rosaryPreservation = Config.Bind(Name,"Rosary Preservation",false,"Keep part of your rosaries on death. % based on your max health.");
         shardsRecycling = Config.Bind(Name, "Shards Recycling", false, "Gain shards when breaking your cocoon. 5 times your max health.");
+        modToggleDeath = Config.Bind(Name, "Instant Death", true, "The base function of the mod. Disable if you want to take regular damage.");
         Harmony harmony = new(Id);
         harmony.PatchAll();
     }
@@ -30,8 +32,11 @@ class TakeHealth_Patch
 {
     static void Prefix(ref int amount)
     {
-        amount = 999;
-        EternalTormentPlugin.Logger.LogInfo($"Torment is eternal");
+        if (EternalTormentPlugin.modToggleDeath.Value)
+        {
+            amount = 999;
+            EternalTormentPlugin.Logger.LogInfo($"Torment is eternal");
+        }
     }
 }
 
